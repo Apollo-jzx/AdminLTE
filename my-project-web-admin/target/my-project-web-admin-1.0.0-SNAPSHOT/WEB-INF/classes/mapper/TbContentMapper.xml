@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ccc.my.project.web.admin.dao.TbContentDao">
+    <!--封装一次，后面需要直接继承-->
+    <sql id="tbContentColumns">
+             a.id,
+             a.category_id AS categoryId,
+             a.title,
+             a.sub_title AS subTitle,
+             a.title_desc AS titleDesc,
+             a.url,
+             a.pic,
+             a.pic2,
+             a.content,
+             a.created,
+             a.updated,
+             b.id AS "tbContentCategory.id",
+             b.name AS "tbContentCategory.name"
+    </sql>
+
+    <sql id="tbContentJoins">
+        LEFT JOIN
+            tb_content_category AS b
+        ON
+            a.category_id = b.id
+    </sql>
+    <!--查询所有用户信息-->
+    <select id="selectAll" parameterType="com.ccc.my.project.domain.TbContent" resultType="com.ccc.my.project.domain.TbContent" >
+        SELECT
+            <include refid="tbContentColumns"/>
+        FROM
+        tb_content AS a
+            <include refid="tbContentJoins"/>
+    </select>
+
+    <!--新增-->
+    <insert id="insert" parameterType="com.ccc.my.project.domain.TbContent">
+        INSERT INTO
+            tb_content
+            (
+             category_id,
+             title,
+             sub_title,
+             title_desc,
+             url,
+             pic,
+             pic2,
+             content,
+             created,
+             updated
+            )
+        VALUES
+            (
+            #{tbContentCategory.id},
+            #{title},
+            #{subTitle},
+            #{titleDesc},
+            #{url},
+            #{pic},
+            #{pic2},
+            #{content},
+            #{created},
+            #{updated}
+            )
+    </insert>
+    <!--用户编辑-->
+    <update id="update" parameterType="com.ccc.my.project.domain.TbContent">
+        UPDATE
+            tb_content
+        SET
+             category_id = #{tbContentCategory.id},
+             title = #{title},
+             sub_title = #{subTitle},
+             title_desc = #{titleDesc},
+             url = #{url},
+             pic = #{pic},
+             pic2 = #{pic2},
+             content = #{content},
+             created = #{created},
+             updated = #{updated}
+        WHERE
+             id = #{id}
+    </update>
+    <!--根据id查找用户信息-->
+    <select id="getById" parameterType="com.ccc.my.project.domain.TbContent" resultType="com.ccc.my.project.domain.TbContent">
+        SELECT
+            <include refid="tbContentColumns"/>
+        FROM
+            tb_content AS a
+            <include refid="tbContentJoins"/>
+        WHERE
+            a.id = #{id}
+    </select>
+
+    <delete id="delete">
+        DELETE FROM tb_content
+        WHERE id = #{id}
+    </delete>
+    <!--批量删除-->
+    <delete id="deleteMulti" >
+        DELETE FROM
+            tb_content
+        WHERE id IN
+        <foreach collection="array" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </delete>
+    <!--用户信息分页查询-->
+    <!--在用户信息的实体类中没有start，和length字段，所以将参数类型换成map的key，value的键值对形式-->
+    <select id="page" parameterType="java.util.Map" resultType="com.ccc.my.project.domain.TbContent">
+        SELECT
+            <include refid="tbContentColumns"/>
+        FROM
+            tb_content AS a
+            <include refid="tbContentJoins"/>
+        <where>
+            <if test="pageParams.title != null and pageParams.title != ''">
+                AND a.title LIKE CONCAT ('%',#{pageParams.title},'%')
+            </if>
+            <if test="pageParams.subTitle != null and pageParams.subTitle != ''">
+                AND a.sub_title LIKE CONCAT ('%',#{pageParams.subTitle},'%')
+            </if>
+            <if test="pageParams.titleDesc != null and pageParams.titleDesc != ''">
+                AND a.title_desc LIKE CONCAT ('%',#{pageParams.titleDesc},'%')
+            </if>
+        </where>
+            LIMIT #{start},#{length}
+    </select>
+
+    <!--在分页的时候需要一个总信息条数的返回参数，所以在做高级查询的时候也需要匹配查询出对应的条数-->
+    <!--此处的#{username}与上面不同是因为这里传进来的参数就已经是实体类了，所以不需要tbUser.username，上面是因为类型为Map，所以要
+    取出Map中的字段-->
+    <select id="count" resultType="java.lang.Integer">
+        SELECT
+            COUNT(*)
+        FROM
+            tb_content AS a
+        <where>
+            <if test="title != null and title != ''">
+                AND a.title LIKE CONCAT ('%',#{title},'%')
+            </if>
+            <if test="subTitle != null and subTitle != ''">
+                AND a.sub_title LIKE CONCAT ('%',#{subTitle},'%')
+            </if>
+            <if test="titleDesc != null and titleDesc != ''">
+                AND a.title_desc LIKE CONCAT ('%',#{titleDesc},'%')
+            </if>
+        </where>
+    </select>
+
+</mapper>

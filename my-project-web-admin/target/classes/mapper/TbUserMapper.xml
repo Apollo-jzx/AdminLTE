@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ccc.my.project.web.admin.dao.TbUserDao">
+    <!--封装一次，后面需要直接继承-->
+    <sql id="tbUserColumns">
+             a.id,
+             a.username,
+             a.password,
+             a.phone,
+             a.email,
+             a.created,
+             a.updated
+    </sql>
+    <!--查询所有用户信息-->
+    <select id="selectAll" parameterType="com.ccc.my.project.domain.TbUser" resultType="com.ccc.my.project.domain.TbUser" >
+        SELECT
+            <include refid="tbUserColumns"/>
+        FROM
+            tb_user AS a
+    </select>
+    <!--用户登陆-->
+    <select id="login" parameterType="com.ccc.my.project.domain.TbUser" resultType="com.ccc.my.project.domain.TbUser">
+        SELECT
+            <include refid="tbUserColumns"/>
+        FROM
+            tb_user AS a
+        WHERE
+            email = #{email}
+    </select>
+    <!--新增用户-->
+    <insert id="insert">
+        INSERT INTO
+            tb_user
+            (
+            username,
+            password,
+            phone,
+            email,
+            created,
+            updated
+            )
+        VALUES
+            (
+            #{username},
+            #{password},
+            #{phone},
+            #{email},
+            #{created},
+            #{updated}
+            )
+    </insert>
+    <!--用户编辑-->
+    <update id="update" parameterType="com.ccc.my.project.domain.TbUser">
+        UPDATE
+            tb_user
+        SET
+            username = #{username},
+            password = #{password},
+            phone = #{phone},
+            email = #{email},
+            updated = #{updated}
+        WHERE
+            id = #{id}
+    </update>
+    <!--根据id查找用户信息-->
+    <select id="getById" parameterType="com.ccc.my.project.domain.TbUser" resultType="com.ccc.my.project.domain.TbUser">
+        SELECT
+            <include refid="tbUserColumns"/>
+        FROM
+            tb_user AS a
+        WHERE
+            id = #{id}
+    </select>
+
+    <delete id="delete">
+        DELETE FROM tb_user
+        WHERE id = #{id}
+    </delete>
+    <!--批量删除-->
+    <delete id="deleteMulti" >
+        DELETE FROM
+            tb_user
+        WHERE id IN
+            <foreach collection="array" open="(" close=")" separator="," item="id">
+                #{id}
+            </foreach>
+    </delete>
+    <!--用户信息分页查询-->
+    <!--在用户信息的实体类中没有start，和length字段，所以将参数类型换成map的key，value的键值对形式-->
+    <select id="page" parameterType="java.util.Map" resultType="com.ccc.my.project.domain.TbUser">
+        SELECT
+            <include refid="tbUserColumns"/>
+        FROM
+            tb_user AS a
+        <where>
+            <if test="pageParams.username != null and pageParams.username != ''">
+                AND a.username LIKE CONCAT ('%',#{pageParams.username},'%')
+            </if>
+            <if test="pageParams.phone != null and pageParams.phone != ''">
+                AND a.phone LIKE CONCAT ('%',#{pageParams.phone},'%')
+            </if>
+            <if test="pageParams.email != null and pageParams.email != ''">
+                AND a.email LIKE CONCAT ('%',#{pageParams.email},'%')
+            </if>
+        </where>
+        LIMIT #{start},#{length}
+    </select>
+
+    <!--在分页的时候需要一个总信息条数的返回参数，所以在做高级查询的时候也需要匹配查询出对应的条数-->
+    <!--此处的#{username}与上面不同是因为这里传进来的参数就已经是实体类了，所以不需要tbUser.username，上面是因为类型为Map，所以要
+    取出Map中的字段-->
+    <select id="count" resultType="java.lang.Integer">
+        SELECT
+            COUNT(*)
+        FROM
+            tb_user AS a
+        <where>
+            <if test="username != null and username != ''">
+                AND a.username LIKE CONCAT ('%',#{username},'%')
+            </if>
+            <if test="phone != null and phone != ''" >
+                AND a.phone LIKE CONCAT ('%', #{phone}, '%')
+            </if>
+            <if test="email != null and email != ''" >
+                AND a.email LIKE CONCAT ('%', #{email}, '%')
+            </if>
+        </where>
+    </select>
+
+
+
+</mapper>
