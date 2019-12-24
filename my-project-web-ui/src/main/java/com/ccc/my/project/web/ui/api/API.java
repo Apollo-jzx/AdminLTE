@@ -1,6 +1,5 @@
 package com.ccc.my.project.web.ui.api;
 
-import org.omg.CORBA.PUBLIC_MEMBER;
 
 /**
  * API常量

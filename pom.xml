@@ -51,7 +51,7 @@
 
 
     <modules>
-<!--        <module>my-project-external</module>-->
+        <module>my-project-external</module>
         <module>my-project-dependencies</module>
         <module>my-project-commons</module>
         <module>my-project-domain</module>

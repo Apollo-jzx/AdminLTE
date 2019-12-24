@@ -33,11 +33,13 @@
         <property name="maxUploadSize" value="${web.maxUploadSize}"/>
     </bean>
 
-<!--    <mvc:interceptors>
+    <!--Spring MVC拦截器只拦截登录页和注册页-->
+    <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/login"/>
             <mvc:mapping path="/register"/>
-            <bean class="com.funtl.my.shop.web.ui.interceptor.LoginInterceptor" />
+            <bean class="com.ccc.my.project.web.ui.interceptor.LoginInterceptor" />
         </mvc:interceptor>
-    </mvc:interceptors>-->
+    </mvc:interceptors>
+
 </beans>

@@ -34,14 +34,14 @@ public class TbContentController {
 
     /**
      * 根据类别ID 查询内容列表
-     * @param categoryId
      * @return
      */
-    @RequestMapping(value = "{category_id}",method = RequestMethod.GET)
+    @RequestMapping(value = "ppt",method = RequestMethod.GET)
     //@PathVariable 路径参数
-    public BaseResult findContentByCategoryId(@PathVariable(value = "category_id") Long categoryId) {
+    /*public BaseResult findContentByCategoryId(@PathVariable(value = "category_id") Long categoryId) {*/
+        public BaseResult PPT() {
         List<TbContentDTO> tbContentDTOS = null;
-        List<TbContent> tbContents = tbContentService.selectByCategoryId(categoryId);
+        List<TbContent> tbContents = tbContentService.selectByCategoryId(89L);
 
         if (tbContents != null && tbContents.size() >0) {
             tbContentDTOS = new ArrayList<>();

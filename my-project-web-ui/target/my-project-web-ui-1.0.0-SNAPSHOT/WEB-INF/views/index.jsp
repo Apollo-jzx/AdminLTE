@@ -66,10 +66,10 @@
         </ul>
         <ul class="header-right">
             <c:if test="${tbUser != null}">
-                <li class="denglu">Hi~ ${tbUser.username} 欢迎回来 <a class="red" href="/logout">[注销]</a></li>
+                <li class="denglu">Hi~ ${tbUser.username} 欢迎登录 <a class="red" href="/logout">[注销]</a></li>
             </c:if>
             <c:if test="${tbUser == null}">
-                <li class="denglu">Hi~<a class="red" href="/login">请登录!</a> <a href="/register">[免费注册]</a></li>
+                <li class="denglu">HI~ <a class="red" href="/login"> 请登录! </a> <a href="#"> [免费注册] </a></li>
             </c:if>
             <li class="shu"></li>
             <li class="denglu"><a class="ing_ps" href="#">我的收藏</a></li>
@@ -575,7 +575,7 @@
 <div id="lunbo">
     <ul id="one">
         <c:forEach items="${ppt}" var="ppt">
-            <li><a href="#"><img src="${ppt.pic}" alt="${ppt.title}" title="${ppt.title}"></a></li>
+            <li><a href="${ppt.url}"><img src="${ppt.pic}" alt="${ppt.title}" title="${ppt.title}"></a></li>
         </c:forEach>
     </ul>
     <ul id="two">

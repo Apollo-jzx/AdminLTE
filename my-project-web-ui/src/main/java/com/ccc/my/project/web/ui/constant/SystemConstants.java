@@ -9,5 +9,5 @@ public class SystemConstants {
     /**
      * session会话中
      */
-    public static final String SESSION_USER_KEY = "TbUser";
+    public static final String SESSION_USER_KEY = "tbUser";
 }

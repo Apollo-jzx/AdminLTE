@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ccc.my.project.web.api.dao.TbUserDao">
+    <!--封装一次，后面需要直接继承-->
+    <sql id="tbUserColumns">
+             a.id,
+             a.username,
+             a.password,
+             a.phone,
+             a.email,
+             a.created,
+             a.updated
+    </sql>
+    <!--查询所有用户信息-->
+    <select id="selectAll" parameterType="com.ccc.my.project.domain.TbUser" resultType="com.ccc.my.project.domain.TbUser" >
+        SELECT
+            <include refid="tbUserColumns"/>
+        FROM
+            tb_user AS a
+    </select>
+
+    <select id="login" parameterType="com.ccc.my.project.domain.TbUser" resultType="com.ccc.my.project.domain.TbUser">
+        SELECT
+            <include refid="tbUserColumns"/>
+        FROM
+            tb_user AS a
+        WHERE
+            username=#{username}
+        OR
+            phone=#{username}
+        OR
+            email=#{username}
+    </select>
+</mapper>

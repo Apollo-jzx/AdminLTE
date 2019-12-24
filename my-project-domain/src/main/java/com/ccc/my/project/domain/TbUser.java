@@ -4,6 +4,7 @@ import com.ccc.my.project.commons.persistence.BaseEntity;
 import com.ccc.my.project.commons.utils.RegexpUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Pattern;
@@ -15,6 +16,7 @@ import javax.validation.constraints.Pattern;
  */
 //lombok的封装注解（getter和setter）
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class TbUser extends BaseEntity {
 
     /*在commons里面有一个BaseEntity的实体类基类，所以公共属性 id，created,updated,属于基类中的属性*/

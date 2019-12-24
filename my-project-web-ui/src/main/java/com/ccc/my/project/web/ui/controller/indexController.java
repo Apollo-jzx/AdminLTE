@@ -1,6 +1,9 @@
 package com.ccc.my.project.web.ui.controller;
 
-import com.ccc.my.project.web.ui.api.constantApi;
+import com.ccc.my.project.commons.utils.HttpClientUtils;
+import com.ccc.my.project.commons.utils.MapperUtils;
+import com.ccc.my.project.web.ui.api.API;
+import com.ccc.my.project.web.ui.api.ContentsApi;
 import com.ccc.my.project.web.ui.dto.TbContent;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,7 +36,13 @@ public class indexController {
      * @param model
      */
    private void requetsContentsPPT(Model model) {
-       List<TbContent> tbContents = constantApi.ppt();
+    List<TbContent> tbContents = null;
+    String result = HttpClientUtils.doGet(API.API_CONTENTS_PPT);
+       try {
+           tbContents = MapperUtils.json2listByTree(result, "data", TbContent.class);
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
        model.addAttribute("ppt",tbContents);
    }
 
